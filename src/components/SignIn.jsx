@@ -69,6 +69,10 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
             });
 
             const userData = await userResponse.json();
+            if (!userData.user.isAuthor) {
+                localStorage.clear("token")
+                throw new Error("Login failed - Not an author")
+            }
             setLocalStorage("user", userData.user);
 
             logIn(userData.user.username);
