@@ -42,6 +42,8 @@ const StyledMain = styled.main`
         display: flex;
         width: 100%;
         justify-content: flex-end;
+        gap: 6px;
+        padding: 6px 0px;
     }
 
     & .main-child-section {
@@ -51,6 +53,7 @@ const StyledMain = styled.main`
 
     & input[id="title"] {
         font-size: 2rem;
+        width: 100%;
     }
 
     & textarea {
@@ -69,14 +72,23 @@ const StyledMain = styled.main`
             display: grid;
             grid-template-columns: repeat( auto-fit, minmax(450px, 1fr));
         }
+
+        & .edit-menu {
+        justify-content: flex-end;
+    }
     }
 `
 
-const MainView = ({ posts, viewingPost, updateViewingPost, getPosts}) => {
+const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, creatingPost, toggleCreatingPost}) => {
     const [editingPost, setEditingPost] = useState(false);
     const [title, setTitle] = useState(viewingPost ? viewingPost.title : "");
     const [summary, setSummary] = useState(viewingPost ? viewingPost.summary : "");
     const [content, setContent] = useState(viewingPost ? viewingPost.content : "");
+
+    const [newTitle, setNewTitle] = useState("");
+    const [newSummary, setNewSummary] = useState("");
+    const [newContent, setNewContent] = useState("");
+    const [newPublishedState, setNewPublishedState] = useState('false');
 
     useEffect(() => {
         if (viewingPost) {
@@ -85,6 +97,29 @@ const MainView = ({ posts, viewingPost, updateViewingPost, getPosts}) => {
             setContent(viewingPost.content);
         }
     }, [viewingPost]);
+
+    async function createNewPost(event) {
+        event.preventDefault()
+        
+        const token = localStorage.getItem("token")
+        const usernameData = localStorage.getItem("user")
+
+        if (usernameData) {
+            const parsedUsernameData = JSON.parse(usernameData);
+            await fetch(`http://localhost:3000/users/${parsedUsernameData.username}/posts`, {
+                mode: 'cors',
+                method: "POST",
+                headers: {
+                    "Content-type": 'application/json',
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: JSON.stringify({ title: newTitle, summary: newSummary, content: newContent, published: newPublishedState })
+            }).then(() => {
+                getPosts(parsedUsernameData.username);
+                toggleCreatingPost()
+            }).catch(error => console.error(error.message));
+        }
+    }
 
     async function handleSavePost(event) {
         event.preventDefault();
@@ -147,13 +182,34 @@ const MainView = ({ posts, viewingPost, updateViewingPost, getPosts}) => {
                    </>   
                 )
             ) : (
-                <section className="blog-posts-section">
-                    <ul className="blog-posts-list">
-                        {posts.map((post) => (
-                            <BlogListItem key={post.id} post={post} updateViewingPost={updateViewingPost} getPosts={getPosts} />
-                        ))}
-                    </ul>
-                </section>
+                creatingPost ? (
+                    <>
+                        <form onSubmit={createNewPost} className="main-child-section">
+                        <div className="edit-menu">
+                            <button onClick={() => setNewPublishedState('false')} type="submit"><i className="fa-solid fa-floppy-disk"></i> Save Draft</button>
+                            <button onClick={() => setNewPublishedState('true')} type="submit"><i className="fa-solid fa-paper-plane"></i> Publish</button>
+                        </div>
+                            <label hidden htmlFor="title"></label>
+                            <input type="text" id="title" name="title" value={newTitle} placeholder="Title" onChange={(e) => setNewTitle(e.target.value)}/>
+                            <h3>Summary</h3>
+                            <label hidden htmlFor="summary"></label>
+                            <textarea id="summary" name="summary" rows={3} value={newSummary} onChange={(e) => setNewSummary(e.target.value)}/>
+                            <span className="post-menu" ><div>By {username}</div></span>
+                            <h3>Content</h3>
+                            <label hidden htmlFor="content"></label>
+                            <textarea id="content" name="content" rows={6} value={newContent} onChange={(e) => setNewContent(e.target.value)}/>
+                        </form>
+                   <hr />
+                   </>    
+                ) : (
+                    <section className="blog-posts-section">
+                        <ul className="blog-posts-list">
+                            {posts.map((post) => (
+                                <BlogListItem key={post.id} post={post} updateViewingPost={updateViewingPost} getPosts={getPosts} />
+                            ))}
+                        </ul>
+                    </section>
+                )
             )}
         </StyledMain>
     );

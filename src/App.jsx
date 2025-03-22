@@ -41,9 +41,20 @@ function App() {
   const [signInStatus, setSignInStatus] = useState('logged out');
   const [viewingPost, setViewingPost] = useState(null)
   const [posts, setPosts] = useState([])
+  const [creatingPost, setCreatingPost] = useState(false);
 
   function updateViewingPost(post) {
     setViewingPost(post)
+  }
+
+  function toggleCreatingPost(state) {
+    if (state === false) {
+      setCreatingPost(false)
+    } else if (state === true) {
+      setCreatingPost(true);
+    } else {
+      setCreatingPost(!creatingPost);
+    }
   }
 
   function setLocalStorage(key, value) {
@@ -133,8 +144,8 @@ function App() {
         <h2>Author Client</h2>
       </StyledHeader>
       <hr />
-      <SignIn usernameData={username} setLocalStorage={setLocalStorage} viewSignUp={viewSignUp} signInStatus={signInStatus} logOut={logOut} logIn={logIn} updateViewingPost={updateViewingPost}/>
-      <MainView username={username} posts={posts} viewingPost={viewingPost} updateViewingPost={updateViewingPost} getPosts={getPosts}/>
+      <SignIn usernameData={username} setLocalStorage={setLocalStorage} viewSignUp={viewSignUp} signInStatus={signInStatus} logOut={logOut} logIn={logIn} updateViewingPost={updateViewingPost} toggleCreatingPost={toggleCreatingPost} />
+      <MainView username={username} posts={posts} viewingPost={viewingPost} updateViewingPost={updateViewingPost} getPosts={getPosts} creatingPost={creatingPost} toggleCreatingPost={toggleCreatingPost} />
       <StyledFooter>
         Made by Wade
       </StyledFooter>

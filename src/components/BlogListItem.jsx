@@ -9,7 +9,6 @@ const StyledBlogListItem = styled.li`
    width: 100%;
    height: 100%;
    max-width: 650px;
-   cursor: pointer;
 
    &:hover {
     filter: drop-shadow(5px 3px 2px black);
@@ -70,7 +69,7 @@ const StyledBlogListItem = styled.li`
    }
 
    .status {
-    padding: 0px 8px;
+    padding: 0px 16px;
     border-radius: 0px 0px 0px 16px;
    }
 

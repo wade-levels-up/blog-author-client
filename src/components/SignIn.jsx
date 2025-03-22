@@ -39,7 +39,7 @@ const StyledSection = styled.section`
     }
 `
 
-const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut, logIn, updateViewingPost}) => {
+const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut, logIn, updateViewingPost, toggleCreatingPost}) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
@@ -104,8 +104,8 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
         return (
             <StyledSection>
                 <h2>Hi {usernameData}</h2>
-                <button title="View All Posts" onClick={() => updateViewingPost(null)}><i className="fa-solid fa-eye"></i> All Posts</button>
-                <button title="Create New Post"><i className="fa-solid fa-square-plus"></i> Create Post</button>
+                <button title="View All Posts" onClick={() => {updateViewingPost(null); toggleCreatingPost(false)}}><i className="fa-solid fa-eye"></i> All Posts</button>
+                <button onClick={() => toggleCreatingPost()} title="Create New Post"><i className="fa-solid fa-square-plus"></i> Create Post</button>
                 <button onClick={logOut}><i className="fa-solid fa-right-from-bracket"></i> Log Out</button>
             </StyledSection>
         );
