@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { jwtDecode } from 'jwt-decode';
 import styled from "styled-components";
 import SignIn from './components/SignIn';
-// import MainView from './components/MainView';
+import MainView from './components/MainView';
 
 // Styled Components
 
@@ -41,7 +41,6 @@ function App() {
   const [signInStatus, setSignInStatus] = useState('logged out');
   const [viewingPost, setViewingPost] = useState(null)
   const [posts, setPosts] = useState([])
-  const [comments, setComments] = useState([]);
 
   function updateViewingPost(post) {
     setViewingPost(post)
@@ -60,31 +59,28 @@ function App() {
     localStorage.removeItem("user");
     setUsername("");
     setSignInStatus('logged out')
+    setPosts([]);
   }
 
   function logIn(usernameData) {
     setUsername(usernameData);
     setSignInStatus('logged in')
+    getPosts(usernameData)
   }
 
   function viewSignUp() {
     setSignInStatus('signing up')
   }
 
-  async function deleteComment(commentId) {
+  async function getPosts(username) {
     const token = localStorage.getItem("token");
-    await fetch(`http://localhost:3000/users/${username}/comments/${commentId}`, {
-      method: "DELETE",
+    fetch(`http://localhost:3000/users/${username}/posts`, {
+      mode: 'cors',
+      method: "GET",
       headers: {
           "Content-type": "application/json",
           "Authorization": `Bearer ${token}`
-      }
-    }).catch(error => console.error(error));
-    getComments();
-  }
-
-  async function getComments() {
-    fetch('http://localhost:3000/comments', {mode: 'cors'})
+        }})
     .then((response) => {
       if (response.status >= 400) {
         const error = new Error("Server Error");
@@ -94,12 +90,9 @@ function App() {
       return response.json();
     })
     .then((data) => {
-      setComments(data.comments)
+      setPosts(data.posts)
     })
-    .catch((error) => {
-      console.error(error.message)
-      setComments([])
-    })
+    .catch(error => console.error(error.message))
   }
 
   function isTokenExpired(token) {
@@ -126,40 +119,11 @@ function App() {
       if (usernameData) {
         const parsedUsernameData = JSON.parse(usernameData);
         setUsername(parsedUsernameData.username)
+
+        getPosts(parsedUsernameData.username);
       }
     }
-
-    fetch('http://localhost:3000/posts', {mode: 'cors'})
-    .then((response) => {
-      if (response.status >= 400) {
-        const error = new Error("Server Error");
-        error.status = response.status;
-        throw error;
-      }
-      return response.json();
-    })
-    .then((data) => {
-      setPosts(data.posts)
-    })
-    .catch(error => console.error(error.message))
-
-
-    fetch('http://localhost:3000/comments', {mode: 'cors'})
-    .then((response) => {
-      if (response.status >= 400) {
-        const error = new Error("Server Error");
-        error.status = response.status;
-        throw error;
-      }
-      return response.json();
-    })
-    .then((data) => {
-      setComments(data.comments)
-    })
-    .catch((error) => {
-      console.error(error.message)
-      setComments([])
-    })
+    
   }, []);
 
   return (
@@ -170,6 +134,10 @@ function App() {
       </StyledHeader>
       <hr />
       <SignIn usernameData={username} setLocalStorage={setLocalStorage} viewSignUp={viewSignUp} signInStatus={signInStatus} logOut={logOut} logIn={logIn} updateViewingPost={updateViewingPost}/>
+      <MainView username={username} posts={posts} viewingPost={viewingPost} updateViewingPost={updateViewingPost}/>
+      <StyledFooter>
+        Made by Wade
+      </StyledFooter>
     </>
   )
 }

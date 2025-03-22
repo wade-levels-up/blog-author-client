@@ -52,7 +52,7 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
             headers: {
                 "Content-type": "application/json",
             },
-            body: JSON.stringify({ username, password}),
+            body: JSON.stringify({ username, password }),
         });
 
         if (response.ok) {
