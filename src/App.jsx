@@ -74,7 +74,7 @@ function App() {
 
   async function getPosts(username) {
     const token = localStorage.getItem("token");
-    fetch(`http://localhost:3000/users/${username}/posts`, {
+    await fetch(`http://localhost:3000/users/${username}/posts`, {
       mode: 'cors',
       method: "GET",
       headers: {
@@ -90,7 +90,7 @@ function App() {
       return response.json();
     })
     .then((data) => {
-      setPosts(data.posts)
+      setPosts([...data.posts])
     })
     .catch(error => console.error(error.message))
   }

@@ -79,6 +79,7 @@ const StyledBlogListItem = styled.li`
 const BlogListItem = ({post, updateViewingPost, getPosts}) => {
 
     async function handleUpdatePublished() {
+        
         const usernameData = localStorage.getItem("user");
         const token = localStorage.getItem("token");
         const { title, summary, content } = post;
