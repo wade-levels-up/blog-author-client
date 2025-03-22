@@ -55,7 +55,7 @@ const StyledMain = styled.main`
     }
 `
 
-const MainView = ({ posts, viewingPost, updateViewingPost, deletePost}) => {
+const MainView = ({ posts, viewingPost, updateViewingPost, getPosts}) => {
 
     return (
         <StyledMain>
@@ -72,7 +72,7 @@ const MainView = ({ posts, viewingPost, updateViewingPost, deletePost}) => {
                 <section className="blog-posts-section">
                     <ul className="blog-posts-list">
                         {posts.map((post) => (
-                            <BlogListItem key={post.id} post={post} updateViewingPost={updateViewingPost} deletePost={deletePost} />
+                            <BlogListItem key={post.id} post={post} updateViewingPost={updateViewingPost} getPosts={getPosts} />
                         ))}
                     </ul>
                 </section>
