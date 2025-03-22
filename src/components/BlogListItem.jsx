@@ -47,19 +47,33 @@ const StyledBlogListItem = styled.li`
     align-items: center;
     background-color: #7f91a3;
     border-radius: 0px 0px 16px 16px;
-    padding: 2px 8px;
+    padding: 0px 0px 0px 12px;
+   }
+
+  button {
+    border: none;
+    border-left: 2px ridge slategray;
+    background-color: transparent;
+   }
+
+   .delete-button {
+    border-radius: 0px 0px 12px 0px;
    }
 
 `
 
-const BlogListItem = ({post, updateViewingPost }) => {
+const BlogListItem = ({post, updateViewingPost, deletePost }) => {
 
-    return   <StyledBlogListItem onClick={() => updateViewingPost(post)}>
+    return   <StyledBlogListItem>
                 <h2>{post.title}</h2>
                 <p className="date">{format(post.created, 'PPPP')}</p>
                 <p className="summary">{post.summary}</p>
                 <span>
-                    <div>By {post.author}</div>
+                    <div>Status: { post.published ? ( 'Published') : ( 'Draft')}</div>
+                    <div>
+                        <button onClick={() => updateViewingPost(post)} title="Edit Post"><i className="fa-solid fa-pencil"></i></button>
+                        <button onClick={() => deletePost(post.id)} className="delete-button" title="Delete Post"><i className="fa-solid fa-trash"></i></button>
+                    </div>
                 </span>
             </StyledBlogListItem>
 }

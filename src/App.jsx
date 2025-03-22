@@ -95,6 +95,24 @@ function App() {
     .catch(error => console.error(error.message))
   }
 
+  async function deletePost(postId) {
+    const usernameData = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    if (usernameData) {
+      const parsedUsernameData = JSON.parse(usernameData);
+      fetch(`http://localhost:3000/users/${parsedUsernameData.username}/posts/${postId}`, {
+        mode: 'cors',
+        method: 'DELETE',
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      }).then(() => {
+        getPosts(parsedUsernameData.username);
+      })
+      .catch(error => console.error(error.message));
+    }
+  }
+
   function isTokenExpired(token) {
     try {
       const decoded = jwtDecode(token);
@@ -134,7 +152,7 @@ function App() {
       </StyledHeader>
       <hr />
       <SignIn usernameData={username} setLocalStorage={setLocalStorage} viewSignUp={viewSignUp} signInStatus={signInStatus} logOut={logOut} logIn={logIn} updateViewingPost={updateViewingPost}/>
-      <MainView username={username} posts={posts} viewingPost={viewingPost} updateViewingPost={updateViewingPost}/>
+      <MainView username={username} posts={posts} viewingPost={viewingPost} updateViewingPost={updateViewingPost} deletePost={deletePost}/>
       <StyledFooter>
         Made by Wade
       </StyledFooter>
