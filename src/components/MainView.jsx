@@ -40,6 +40,7 @@ const StyledMain = styled.main`
     }
 
     & .post-content {
+        text-wrap: pretty;
         white-space: pre-wrap;
     }
 
@@ -222,14 +223,14 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
                         <button onClick={() => setEditingPost(!editingPost)}><i className="fa-solid fa-xmark"></i> Cancel</button>
                     </div>
                         <label hidden htmlFor="title"></label>
-                        <input type="text" id="title" name="title" value={title} placeholder="Title" onChange={(e) => setTitle(e.target.value)}/>
+                        <input type="text" id="title" name="title" value={title} placeholder="Title" onChange={(e) => setTitle(e.target.value)} required maxLength={50}/>
                         <h3>Summary</h3>
                         <label hidden htmlFor="summary"></label>
-                        <textarea id="summary" name="summary" rows={3} value={summary} onChange={(e) => setSummary(e.target.value)}/>
+                        <textarea id="summary" name="summary" rows={3} value={summary} onChange={(e) => setSummary(e.target.value)} required maxLength={1500}/>
                         <span className="post-menu" ><div>By {viewingPost.author}</div></span>
                         <h3>Content</h3>
                         <label hidden htmlFor="content"></label>
-                        <textarea id="content" name="content" rows={3} value={content} onChange={(e) => setContent(e.target.value)}/>
+                        <textarea id="content" name="content" rows={3} value={content} onChange={(e) => setContent(e.target.value)} required/>
                    </form>
                    <hr />
                    <ul className="comments-list main-child-section">
@@ -272,14 +273,14 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
                             <button onClick={() => setNewPublishedState('true')} type="submit"><i className="fa-solid fa-paper-plane"></i> Publish</button>
                         </div>
                             <label hidden htmlFor="title"></label>
-                            <input type="text" id="title" name="title" value={newTitle} placeholder="Title" onChange={(e) => setNewTitle(e.target.value)}/>
+                            <input type="text" id="title" name="title" value={newTitle} placeholder="Title" onChange={(e) => setNewTitle(e.target.value)} required maxLength={50}/>
                             <h3>Summary</h3>
                             <label hidden htmlFor="summary"></label>
-                            <textarea id="summary" name="summary" rows={3} value={newSummary} onChange={(e) => setNewSummary(e.target.value)}/>
+                            <textarea id="summary" name="summary" rows={3} value={newSummary} onChange={(e) => setNewSummary(e.target.value)} required maxLength={1500}/>
                             <span className="post-menu" ><div>By {username}</div></span>
                             <h3>Content</h3>
                             <label hidden htmlFor="content"></label>
-                            <textarea id="content" name="content" rows={6} value={newContent} onChange={(e) => setNewContent(e.target.value)}/>
+                            <textarea id="content" name="content" rows={6} value={newContent} onChange={(e) => setNewContent(e.target.value)} required/>
                         </form>
                    <hr />
                    </>    

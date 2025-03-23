@@ -124,11 +124,11 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
                     <ul>
                         <li>
                             <label htmlFor="username">Username </label> 
-                            <input type="text" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required/>
+                            <input type="text" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required maxLength={30}/>
                         </li>
                         <li>
                             <label htmlFor="password">Password </label>
-                            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
+                            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8}/>
                         </li>
                         <li>
                             <label htmlFor="email">Email </label>
