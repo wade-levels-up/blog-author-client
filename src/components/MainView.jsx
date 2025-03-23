@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import BlogListItem from "./blogListItem";
+import Comment from "./Comment";
 
 const StyledMain = styled.main`
     display: flex;
@@ -63,6 +64,31 @@ const StyledMain = styled.main`
         resize: vertical;
     }
 
+    & .comment-form {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        background-color: slategray;
+        padding: 12px;
+    }
+
+    & .comment-form li {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+    }
+
+    & .comment-form input {
+        margin-left: 12px;
+        margin-bottom: 12px;
+        width: 100%;
+    }
+
+    & .comments-list {
+        display: flex;
+        flex-direction: column;
+    }
+
     @media (min-width: 850px) {
         & h2 {
             font-size: 2.5rem;
@@ -81,6 +107,9 @@ const StyledMain = styled.main`
 
 const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, creatingPost, toggleCreatingPost}) => {
     const [editingPost, setEditingPost] = useState(false);
+    const [comments, setComments] = useState([]);
+    const [viewingPostCommentCount, setViewingPostCommentCount] = useState(0);
+
     const [title, setTitle] = useState(viewingPost ? viewingPost.title : "");
     const [summary, setSummary] = useState(viewingPost ? viewingPost.summary : "");
     const [content, setContent] = useState(viewingPost ? viewingPost.content : "");
@@ -96,13 +125,46 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
             setSummary(viewingPost.summary);
             setContent(viewingPost.content);
         }
-    }, [viewingPost]);
+
+        getComments()
+
+        let postComments = 0;
+        comments.forEach((comment) => {
+            if (viewingPost && (comment.postId === viewingPost.id)) {
+                postComments = postComments + 1;
+            }
+        })
+        setViewingPostCommentCount(postComments)
+
+    }, [viewingPost, comments]);
+
+    async function getComments() {
+        fetch('http://localhost:3000/comments', {mode: 'cors'})
+        .then((response) => {
+          if (response.status >= 400) {
+            const error = new Error("Server Error");
+            error.status = response.status;
+            throw error;
+          }
+          return response.json();
+        })
+        .then((data) => {
+          let allComments = data.comments
+          allComments.filter(comment => comment.postId === viewingPost.id)
+          setComments(allComments);
+        })
+        .catch((error) => {
+          console.error(error.message)
+          setComments([])
+        })
+    }
 
     async function createNewPost(event) {
         event.preventDefault()
         
         const token = localStorage.getItem("token")
         const usernameData = localStorage.getItem("user")
+
 
         if (usernameData) {
             const parsedUsernameData = JSON.parse(usernameData);
@@ -166,6 +228,14 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
                         <textarea id="content" name="content" rows={3} value={content} onChange={(e) => setContent(e.target.value)}/>
                    </form>
                    <hr />
+                   <ul className="comments-list main-child-section">
+                        <h4>{viewingPostCommentCount} Comment/s</h4>
+                        {comments.map((comment) => {
+                            if (comment.postId === viewingPost.id) {
+                                return <Comment key={comment.id} username={username} comment={comment} />
+                            } 
+                        })}
+                    </ul>
                    </>       
                 ) : (
                     <>
@@ -179,6 +249,14 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
                        <p className="post-content">{viewingPost.content}</p>
                    </section>
                    <hr />
+                   <ul className="comments-list main-child-section">
+                        <h4>{viewingPostCommentCount} Comment/s</h4>
+                        {comments.map((comment) => {
+                            if (comment.postId === viewingPost.id) {
+                                return <Comment key={comment.id} username={username} comment={comment} />
+                            } 
+                        })}
+                    </ul>
                    </>   
                 )
             ) : (
