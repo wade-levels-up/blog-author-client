@@ -55,7 +55,25 @@ const StyledLi = styled.li`
     }
 `
 
-const Comment = ({comment, deleteComment}) => {
+const Comment = ({comment, getComments}) => {
+
+    async function deleteComment(commentId) {
+        const usernameData = localStorage.getItem("user");
+        const token = localStorage.getItem("token");
+        if (usernameData) {
+          const parsedUsernameData = JSON.parse(usernameData);
+          fetch(`http://localhost:3000/users/${parsedUsernameData.username}/comments/${commentId}`, {
+            mode: 'cors',
+            method: 'DELETE',
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          }).then(() => {
+            getComments();
+          })
+          .catch(error => console.error(error.message));
+        }
+    }
 
     return (
         <StyledLi>
@@ -63,7 +81,7 @@ const Comment = ({comment, deleteComment}) => {
                 <div>{comment.username}</div>
                 <div>
                     <p>{format(comment.created, 'dd.M.yy')}</p>
-                    <button title="Delete Comment" onClick={() => deleteComment(comment.id)}><i className="fa-solid fa-trash"></i></button>
+                    <button title="Delete Comment" onClick={() => {deleteComment(comment.id)}}><i className="fa-solid fa-trash"></i></button>
                 </div>   
             </span>
             <p>{comment.content}</p>

@@ -124,19 +124,21 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
             setTitle(viewingPost.title);
             setSummary(viewingPost.summary);
             setContent(viewingPost.content);
+            getComments();
         }
+    }, [viewingPost]);
 
-        getComments()
-
-        let postComments = 0;
-        comments.forEach((comment) => {
-            if (viewingPost && (comment.postId === viewingPost.id)) {
-                postComments = postComments + 1;
-            }
-        })
-        setViewingPostCommentCount(postComments)
-
-    }, [viewingPost, comments]);
+    useEffect(() => {
+        if (viewingPost) {
+            let postComments = 0;
+            comments.forEach((comment) => {
+                if (comment.postId === viewingPost.id) {
+                    postComments += 1;
+                }
+            });
+            setViewingPostCommentCount(postComments);
+        }
+    }, [comments, viewingPost]);
 
     async function getComments() {
         fetch('http://localhost:3000/comments', {mode: 'cors'})
@@ -149,9 +151,7 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
           return response.json();
         })
         .then((data) => {
-          let allComments = data.comments
-          allComments.filter(comment => comment.postId === viewingPost.id)
-          setComments(allComments);
+          setComments(data.comments);
         })
         .catch((error) => {
           console.error(error.message)
@@ -232,7 +232,7 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
                         <h4>{viewingPostCommentCount} Comment/s</h4>
                         {comments.map((comment) => {
                             if (comment.postId === viewingPost.id) {
-                                return <Comment key={comment.id} username={username} comment={comment} />
+                                return <Comment key={comment.id} username={username} comment={comment} getComments={getComments} />
                             } 
                         })}
                     </ul>
@@ -253,7 +253,7 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
                         <h4>{viewingPostCommentCount} Comment/s</h4>
                         {comments.map((comment) => {
                             if (comment.postId === viewingPost.id) {
-                                return <Comment key={comment.id} username={username} comment={comment} />
+                                return <Comment key={comment.id} username={username} comment={comment} getComments={getComments} />
                             } 
                         })}
                     </ul>
