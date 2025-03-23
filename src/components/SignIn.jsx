@@ -43,6 +43,7 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
+    const [error, setError] = useState("")
 
     async function handleSubmitLogin(event) {
         event.preventDefault();
@@ -74,9 +75,11 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
                 throw new Error("Login failed - Not an author")
             }
             setLocalStorage("user", userData.user);
+            setError("");
 
             logIn(userData.user.username);
         } else {
+            setError('Login failed, please check username and password and try again.');
             console.error("Login failed");
         }
     }
@@ -94,9 +97,11 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
         });
 
         if (response.ok) {
+            setError("");
             logOut();
         } else {
-            console.error("Login failed");
+            setError('Sign up failed. Try another username.')
+            console.error("Sign up failed");
         }
     }
 
@@ -106,7 +111,7 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
                 <h2>Hi {usernameData}</h2>
                 <button title="View All Posts" onClick={() => {updateViewingPost(null); toggleCreatingPost(false)}}><i className="fa-solid fa-eye"></i> All Posts</button>
                 <button onClick={() => {updateViewingPost(null); toggleCreatingPost()}} title="Create New Post"><i className="fa-solid fa-square-plus"></i> Create Post</button>
-                <button onClick={logOut}><i className="fa-solid fa-right-from-bracket"></i> Log Out</button>
+                <button onClick={() => {setUsername(""); setPassword(""); logOut()}}><i className="fa-solid fa-right-from-bracket"></i> Log Out</button>
             </StyledSection>
         );
     } else if (signInStatus === 'signing up') {
@@ -117,15 +122,15 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
                     <ul>
                         <li>
                             <label htmlFor="username">Username </label> 
-                            <input type="text" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)}/>
+                            <input type="text" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required/>
                         </li>
                         <li>
                             <label htmlFor="password">Password </label>
-                            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
                         </li>
                         <li>
                             <label htmlFor="email">Email </label>
-                            <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                            <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
                         </li>
                         <li>
                             <button type="submit">Submit</button>
@@ -135,6 +140,7 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
                         </li>
                     </ul>
                 </form>
+                {error ? <p>{error}</p> : <p></p>}
             </StyledSection>
         )
     } else {
@@ -145,11 +151,11 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
                     <ul>
                         <li>
                             <label htmlFor="username">Username </label> 
-                            <input type="text" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)}/>
+                            <input type="text" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required/>
                         </li>
                         <li>
                             <label htmlFor="password">Password </label>
-                            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
                         </li>
                         <li>
                             <button type="submit">Submit</button>
@@ -159,7 +165,7 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
                         </li>
                     </ul>
                 </form>
-                <button title="View All Posts" onClick={() => updateViewingPost(null)}><i className="fa-solid fa-eye"></i> All Posts</button>
+                {error ? <p>{error}</p> : <p></p>}
             </StyledSection>
         );
     }
