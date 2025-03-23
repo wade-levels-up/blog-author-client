@@ -79,8 +79,9 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
 
             logIn(userData.user.username);
         } else {
-            setError('Login failed, please check username and password and try again.');
-            console.error("Login failed");
+            const errorData = await response.json()
+            setError(`Login failed: ${errorData.message}`);
+            console.error(`Login failed: ${errorData.message}`);
         }
     }
 
@@ -100,8 +101,9 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
             setError("");
             logOut();
         } else {
-            setError('Sign up failed. Try another username.')
-            console.error("Sign up failed");
+            const errorData = await response.json();
+            setError(`Sign-Up failed: ${errorData.message}`);
+            console.error(`Sign-Up failed: ${errorData.message}`);
         }
     }
 
@@ -136,7 +138,7 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
                             <button type="submit">Submit</button>
                         </li>
                         <li>
-                            <button onClick={logOut}>Back</button>
+                            <button onClick={(e) => {e.preventDefault(); setError(''); logOut()}}>Back</button>
                         </li>
                     </ul>
                 </form>
