@@ -39,6 +39,10 @@ const StyledMain = styled.main`
         justify-content: space-between;
     }
 
+    & .post-content {
+        white-space: pre-wrap;
+    }
+
     & .edit-menu {
         display: flex;
         width: 100%;
