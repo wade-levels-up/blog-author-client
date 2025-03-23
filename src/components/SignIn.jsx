@@ -155,7 +155,7 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
                             <button type="submit">Submit</button>
                         </li>
                         <li>
-                            <button onClick={viewSignUp}>Sign Up</button>
+                            <button onClick={(e) => {e.preventDefault(); viewSignUp()}}>Sign Up</button>
                         </li>
                     </ul>
                 </form>
