@@ -86,7 +86,7 @@ function App() {
 
   async function getPosts(username) {
     const token = localStorage.getItem("token");
-    await fetch(`http://localhost:3000/users/${username}/posts`, {
+    await fetch(`https://blog-api-production-346d.up.railway.app/users/${username}/posts`, {
       mode: 'cors',
       method: "GET",
       headers: {

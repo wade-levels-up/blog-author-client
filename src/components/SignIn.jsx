@@ -48,7 +48,7 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
     async function handleSubmitLogin(event) {
         event.preventDefault();
 
-        const response = await fetch("http://localhost:3000/login", {
+        const response = await fetch("https://blog-api-production-346d.up.railway.app/login", {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
@@ -61,7 +61,7 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
             const data = await response.json();
             setLocalStorage("token", data.token);
 
-            const userResponse = await fetch(`http://localhost:3000/users/${username}`, {
+            const userResponse = await fetch(`https://blog-api-production-346d.up.railway.app/users/${username}`, {
                 method: "GET",
                 headers: {
                     "Content-type": "application/json",
@@ -89,7 +89,7 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
         event.preventDefault();
         const isAuthor = 'true';
 
-        const response = await fetch("http://localhost:3000/users", {
+        const response = await fetch("https://blog-api-production-346d.up.railway.app/users", {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
