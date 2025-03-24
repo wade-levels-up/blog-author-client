@@ -145,6 +145,11 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
             setViewingPostCommentCount(postComments);
             setError("");
         }
+
+        setNewTitle("");
+        setNewSummary("");
+        setNewContent("");
+        setNewPublishedState('false');
     }, [comments, viewingPost]);
 
     async function getComments() {

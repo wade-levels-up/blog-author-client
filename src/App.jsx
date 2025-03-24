@@ -68,6 +68,7 @@ function App() {
   function logOut() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    setCreatingPost(false);
     setViewingPost(null);
     setUsername("");
     setSignInStatus('logged out')
