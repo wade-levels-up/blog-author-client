@@ -114,6 +114,7 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
     const [editingPost, setEditingPost] = useState(false);
     const [comments, setComments] = useState([]);
     const [viewingPostCommentCount, setViewingPostCommentCount] = useState(0);
+    const [error, setError] = useState("");
 
     const [title, setTitle] = useState(viewingPost ? viewingPost.title : "");
     const [summary, setSummary] = useState(viewingPost ? viewingPost.summary : "");
@@ -142,6 +143,7 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
                 }
             });
             setViewingPostCommentCount(postComments);
+            setError("");
         }
     }, [comments, viewingPost]);
 
@@ -165,15 +167,13 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
     }
 
     async function createNewPost(event) {
-        event.preventDefault()
-        
+        event.preventDefault()    
         const token = localStorage.getItem("token")
         const usernameData = localStorage.getItem("user")
 
-
         if (usernameData) {
             const parsedUsernameData = JSON.parse(usernameData);
-            await fetch(`http://localhost:3000/users/${parsedUsernameData.username}/posts`, {
+            const response = await fetch(`http://localhost:3000/users/${parsedUsernameData.username}/posts`, {
                 mode: 'cors',
                 method: "POST",
                 headers: {
@@ -181,22 +181,29 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
                     "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify({ title: newTitle, summary: newSummary, content: newContent, published: newPublishedState })
-            }).then(() => {
+            });
+
+            if (response.ok) {
+                setError("");
                 getPosts(parsedUsernameData.username);
                 toggleCreatingPost()
-            }).catch(error => console.error(error.message));
+            } else {
+                const errorData = await response.json();
+                setError(`Add Post failed: ${errorData.message}`);
+                console.error(`Add Post failed: ${errorData.message}`);
+            }
         }
     }
 
     async function handleSavePost(event) {
         event.preventDefault();
-
         const token = localStorage.getItem("token")
         const usernameData = localStorage.getItem("user")
-        const published = viewingPost.published;
+        const published = String(viewingPost.published);
+
         if (usernameData) {
             const parsedUsernameData = JSON.parse(usernameData);
-            await fetch(`http://localhost:3000/users/${parsedUsernameData.username}/posts/${viewingPost.id}`, {
+            const response = await fetch(`http://localhost:3000/users/${parsedUsernameData.username}/posts/${viewingPost.id}`, {
                 mode: 'cors',
                 method: "PUT",
                 headers: {
@@ -204,11 +211,18 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
                     "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify({ title, summary, content, published })
-            }).then(() => {
+            });
+
+            if (response.ok) {
+                setError("")
                 setEditingPost(false);
                 getPosts(parsedUsernameData.username);
                 updateViewingPost(null)
-            }).catch(error => console.error(error.message));
+            } else {
+                const errorData = await response.json();
+                setError(`Update Post failed: ${errorData.message}`);
+                console.error(`Update Post failed: ${errorData.message}`);
+            }
         }
     }
 
@@ -220,7 +234,7 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
                     <form onSubmit={handleSavePost} className="main-child-section">
                     <div className="edit-menu">
                         <button type="submit"><i className="fa-solid fa-floppy-disk"></i> Save</button>
-                        <button onClick={() => setEditingPost(!editingPost)}><i className="fa-solid fa-xmark"></i> Cancel</button>
+                        <button onClick={() => {setTitle(viewingPost.title); setSummary(viewingPost.summary); setContent(viewingPost.content); setEditingPost(!editingPost)}}><i className="fa-solid fa-xmark"></i> Cancel</button>
                     </div>
                         <label hidden htmlFor="title"></label>
                         <input type="text" id="title" name="title" value={title} placeholder="Title" onChange={(e) => setTitle(e.target.value)} required maxLength={50}/>
@@ -232,6 +246,7 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
                         <label hidden htmlFor="content"></label>
                         <textarea id="content" name="content" rows={3} value={content} onChange={(e) => setContent(e.target.value)} required/>
                    </form>
+                   {error ? <p>{error}</p> : <p></p>}
                    <hr />
                    <ul className="comments-list main-child-section">
                         <h4>{viewingPostCommentCount} Comment/s</h4>
@@ -282,6 +297,7 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
                             <label hidden htmlFor="content"></label>
                             <textarea id="content" name="content" rows={6} value={newContent} onChange={(e) => setNewContent(e.target.value)} required/>
                         </form>
+                        {error ? <p>{error}</p> : <p></p>}
                    <hr />
                    </>    
                 ) : (
