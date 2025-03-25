@@ -48,7 +48,7 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
     async function handleSubmitLogin(event) {
         event.preventDefault();
 
-        const response = await fetch(`${import.meta.env.VITE_PROD_API_URL}.app/login`, {
+        const response = await fetch(`${import.meta.env.VITE_PROD_API_URL}/login`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
@@ -61,7 +61,7 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
             const data = await response.json();
             setLocalStorage("token", data.token);
 
-            const userResponse = await fetch(`${import.meta.env.VITE_PROD_API_URL}.app/users/${username}`, {
+            const userResponse = await fetch(`${import.meta.env.VITE_PROD_API_URL}/users/${username}`, {
                 method: "GET",
                 headers: {
                     "Content-type": "application/json",
@@ -89,7 +89,7 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
         event.preventDefault();
         const isAuthor = 'true';
 
-        const response = await fetch(`${import.meta.env.VITE_PROD_API_URL}.app/users`, {
+        const response = await fetch(`${import.meta.env.VITE_PROD_API_URL}/users`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json",

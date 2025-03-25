@@ -87,7 +87,7 @@ const BlogListItem = ({post, updateViewingPost, getPosts}) => {
             const parsedUsernameData = JSON.parse(usernameData);
             const published = post.published ? 'false' : 'true';
      
-            fetch(`${import.meta.env.VITE_PROD_API_URL}.app/users/${parsedUsernameData.username}/posts/${post.id}`, {
+            fetch(`${import.meta.env.VITE_PROD_API_URL}/users/${parsedUsernameData.username}/posts/${post.id}`, {
                 mode: 'cors',
                 method: 'PUT',
                 headers: {
@@ -108,7 +108,7 @@ const BlogListItem = ({post, updateViewingPost, getPosts}) => {
         const token = localStorage.getItem("token");
         if (usernameData) {
           const parsedUsernameData = JSON.parse(usernameData);
-          fetch(`${import.meta.env.VITE_PROD_API_URL}.app/users/${parsedUsernameData.username}/posts/${postId}`, {
+          fetch(`${import.meta.env.VITE_PROD_API_URL}/users/${parsedUsernameData.username}/posts/${postId}`, {
             mode: 'cors',
             method: 'DELETE',
             headers: {
