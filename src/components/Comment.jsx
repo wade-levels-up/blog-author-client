@@ -17,9 +17,10 @@ const StyledLi = styled.li`
 
     & p {
         max-width: 100%;
-        word-break: break-all;
-        text-wrap: pretty;
-        hyphens: auto;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        white-space: normal;
     }
 
     & span div:nth-child(2) {
@@ -62,7 +63,7 @@ const Comment = ({comment, getComments}) => {
         const token = localStorage.getItem("token");
         if (usernameData) {
           const parsedUsernameData = JSON.parse(usernameData);
-          fetch(`https://blog-api-production-346d.up.railway.app/users/${parsedUsernameData.username}/comments/${commentId}`, {
+          fetch(`${import.meta.env.VITE_PROD_API_URL}.app/users/${parsedUsernameData.username}/comments/${commentId}`, {
             mode: 'cors',
             method: 'DELETE',
             headers: {

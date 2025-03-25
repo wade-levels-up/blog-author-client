@@ -54,7 +54,7 @@ const StyledMain = styled.main`
 
     & .main-child-section {
         width: 100%;
-        max-width: 55ch;
+        max-width: 70ch;
     }
 
     & input[id="title"] {
@@ -178,7 +178,7 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
 
         if (usernameData) {
             const parsedUsernameData = JSON.parse(usernameData);
-            const response = await fetch(`https://blog-api-production-346d.up.railway.app/users/${parsedUsernameData.username}/posts`, {
+            const response = await fetch(`${import.meta.env.VITE_PROD_API_URL}.app/users/${parsedUsernameData.username}/posts`, {
                 mode: 'cors',
                 method: "POST",
                 headers: {
@@ -208,7 +208,7 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
 
         if (usernameData) {
             const parsedUsernameData = JSON.parse(usernameData);
-            const response = await fetch(`https://blog-api-production-346d.up.railway.app/users/${parsedUsernameData.username}/posts/${viewingPost.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_PROD_API_URL}.app/users/${parsedUsernameData.username}/posts/${viewingPost.id}`, {
                 mode: 'cors',
                 method: "PUT",
                 headers: {
