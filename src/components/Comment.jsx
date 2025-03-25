@@ -63,7 +63,7 @@ const Comment = ({comment, getComments}) => {
         const token = localStorage.getItem("token");
         if (usernameData) {
           const parsedUsernameData = JSON.parse(usernameData);
-          fetch(`${import.meta.env.VITE_PROD_API_URL}/users/${parsedUsernameData.username}/comments/${commentId}`, {
+          fetch(`https://blog-api-production-346d.up.railway.app/users/${parsedUsernameData.username}/comments/${commentId}`, {
             mode: 'cors',
             method: 'DELETE',
             headers: {

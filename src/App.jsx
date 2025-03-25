@@ -87,7 +87,7 @@ function App() {
 
   async function getPosts(username) {
     const token = localStorage.getItem("token");
-    await fetch(`${import.meta.env.VITE_PROD_API_URL}/users/${username}/posts`, {
+    await fetch(`https://blog-api-production-346d.up.railway.app/users/${username}/posts`, {
       mode: 'cors',
       method: "GET",
       headers: {
