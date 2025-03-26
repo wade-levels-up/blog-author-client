@@ -26,6 +26,27 @@ const StyledSection = styled.section`
         width: 100%;
     }
 
+    & .passwordInputContainer {
+        display: flex;
+        align-items: center;
+        position: relative;
+        width: 188px;
+    }
+
+    & input[id="password"] {
+        width: 100%;
+    }
+
+    & button[title="Toggle Password Visibility"] {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 28px;
+        height: 26px;
+        border: none;
+        background-color: white;
+    }
+
     @media (min-width: 1100px) {
         flex-direction: row;
         align-items: center;
@@ -44,6 +65,7 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
     const [error, setError] = useState("")
+    const [passwordType, setPasswordType] = useState("password");
 
     async function handleSubmitLogin(event) {
         event.preventDefault();
@@ -107,6 +129,14 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
         }
     }
 
+    function togglePasswordVisibility() {
+        if (passwordType === "password") {
+            setPasswordType("text")
+        } else {
+            setPasswordType("password")
+        }
+    }
+
     if (signInStatus === 'logged in') {
         return (
             <StyledSection>
@@ -128,7 +158,10 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
                         </li>
                         <li>
                             <label htmlFor="password">Password </label>
-                            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8}/>
+                            <div className="passwordInputContainer">
+                                <input type={passwordType} id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8}/>
+                                <button title="Toggle Password Visibility" type="button" onClick={(e) => {e.preventDefault(); togglePasswordVisibility()}}>{passwordType === "password" ? (<i className="fa-solid fa-eye-slash"></i>) : (<i className="fa-solid fa-eye"></i>)}</button>
+                            </div>
                         </li>
                         <li>
                             <label htmlFor="email">Email </label>
@@ -157,7 +190,10 @@ const SignIn = ({signInStatus, usernameData, viewSignUp, setLocalStorage, logOut
                         </li>
                         <li>
                             <label htmlFor="password">Password </label>
-                            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
+                            <div className="passwordInputContainer">
+                                <input type={passwordType} id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8}/>
+                                <button title="Toggle Password Visibility" type="button" onClick={(e) => {e.preventDefault(); togglePasswordVisibility()}}>{passwordType === "password" ? (<i className="fa-solid fa-eye-slash"></i>) : (<i className="fa-solid fa-eye"></i>)}</button>
+                            </div>
                         </li>
                         <li>
                             <button type="submit">Submit</button>

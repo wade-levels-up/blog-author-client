@@ -153,7 +153,7 @@ const MainView = ({ posts, username, viewingPost, updateViewingPost, getPosts, c
     }, [comments, viewingPost]);
 
     async function getComments() {
-        fetch('https://blog-api-production-346d.up.railway.app/comments', {mode: 'cors'})
+        fetch(`https://blog-api-production-346d.up.railway.app/comments`, {mode: 'cors'})
         .then((response) => {
           if (response.status >= 400) {
             const error = new Error("Server Error");

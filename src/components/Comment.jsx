@@ -85,7 +85,7 @@ const Comment = ({comment, getComments}) => {
                     <button title="Delete Comment" onClick={() => {deleteComment(comment.id)}}><i className="fa-solid fa-trash"></i></button>
                 </div>   
             </span>
-            <p>{comment.content}</p>
+            <p>{comment.content}</p>   
         </StyledLi>
     )
 }

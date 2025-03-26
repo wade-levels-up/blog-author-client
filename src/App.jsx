@@ -6,6 +6,15 @@ import MainView from './components/MainView';
 
 // Styled Components
 
+const StyledLoader = styled.main`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding-top: 32px;
+    width: 100%;
+`
+
 const StyledHeader = styled.header`
   padding: 20px;
 
@@ -42,6 +51,7 @@ function App() {
   const [viewingPost, setViewingPost] = useState(null)
   const [posts, setPosts] = useState([])
   const [creatingPost, setCreatingPost] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   function updateViewingPost(post) {
     setViewingPost(post)
@@ -86,6 +96,7 @@ function App() {
   }
 
   async function getPosts(username) {
+    setLoading(true);
     const token = localStorage.getItem("token");
     await fetch(`https://blog-api-production-346d.up.railway.app/users/${username}/posts`, {
       mode: 'cors',
@@ -104,8 +115,12 @@ function App() {
     })
     .then((data) => {
       setPosts([...data.posts])
+      setLoading(false);
     })
-    .catch(error => console.error(error.message))
+    .catch((error) => {
+      console.error(error.message);
+      setLoading(false);
+    })
   }
 
   function isTokenExpired(token) {
@@ -147,7 +162,14 @@ function App() {
       </StyledHeader>
       <hr />
       <SignIn usernameData={username} setLocalStorage={setLocalStorage} viewSignUp={viewSignUp} signInStatus={signInStatus} logOut={logOut} logIn={logIn} updateViewingPost={updateViewingPost} toggleCreatingPost={toggleCreatingPost} />
-      <MainView username={username} posts={posts} viewingPost={viewingPost} updateViewingPost={updateViewingPost} getPosts={getPosts} creatingPost={creatingPost} toggleCreatingPost={toggleCreatingPost} />
+      {loading ? (
+        <StyledLoader id='loading'>
+          <i className="fa-solid fa-spinner fa-spin-pulse fa-2xl"></i>
+          <p>Loading Posts...</p>
+        </StyledLoader>
+      ) : (
+        <MainView username={username} posts={posts} viewingPost={viewingPost} updateViewingPost={updateViewingPost} getPosts={getPosts} creatingPost={creatingPost} toggleCreatingPost={toggleCreatingPost} />
+      )}
       <StyledFooter>
         Made by Wade
       </StyledFooter>
