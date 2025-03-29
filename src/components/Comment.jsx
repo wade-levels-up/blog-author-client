@@ -78,7 +78,7 @@ const Comment = ({ comment, getComments, index }) => {
     if (usernameData) {
       const parsedUsernameData = JSON.parse(usernameData);
       fetch(
-        `https://blog-proxy-production.up.railway.app/users/${
+        `https://blog-proxy-production.up.railway.app/app/users/${
           parsedUsernameData.username
         }/comments/${commentId}`,
         {

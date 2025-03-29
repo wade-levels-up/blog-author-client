@@ -110,7 +110,7 @@ const BlogListItem = ({ post, updateViewingPost, getPosts, comments }) => {
       const published = post.published ? "false" : "true";
 
       fetch(
-        `https://blog-proxy-production.up.railway.app/users/${
+        `https://blog-proxy-production.up.railway.app/app/users/${
           parsedUsernameData.username
         }/posts/${post.id}`,
         {
@@ -136,7 +136,7 @@ const BlogListItem = ({ post, updateViewingPost, getPosts, comments }) => {
     if (usernameData) {
       const parsedUsernameData = JSON.parse(usernameData);
       fetch(
-        `https://blog-proxy-production.up.railway.app/users/${
+        `https://blog-proxy-production.up.railway.app/app/users/${
           parsedUsernameData.username
         }/posts/${postId}`,
         {
