@@ -26,15 +26,19 @@ const StyledSection = styled.section`
     width: 100%;
   }
 
-  & .passwordInputContainer {
+  & .passwordInputContainer{
     display: flex;
     align-items: center;
     position: relative;
-    width: 188px;
+    width: 200px;
+  }
+
+  & input {
+    width: 200px;
   }
 
   & input[id="password"] {
-    width: 100%;
+    width: 100%
   }
 
   & button[title="Toggle Password Visibility"] {
