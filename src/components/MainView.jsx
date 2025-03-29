@@ -18,6 +18,14 @@ const StyledMain = styled.main`
     font-size: 2rem;
   }
 
+  & .postBannerImage {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 300px;
+  }
+
+
   & .blog-posts-section {
     display: flex;
     flex-direction: column;
@@ -132,10 +140,14 @@ const MainView = ({
   const [content, setContent] = useState(
     viewingPost ? viewingPost.content : ""
   );
+  const [image, setImage] = useState(
+    viewingPost ? viewingPost.image : ""
+  )
 
   const [newTitle, setNewTitle] = useState("");
   const [newSummary, setNewSummary] = useState("");
   const [newContent, setNewContent] = useState("");
+  const [newImage, setNewImage] = useState("");
   const [newPublishedState, setNewPublishedState] = useState("false");
 
   useEffect(() => {
@@ -149,6 +161,7 @@ const MainView = ({
       setTitle(viewingPost.title);
       setSummary(viewingPost.summary);
       setContent(viewingPost.content);
+      setImage(viewingPost.image);
     }
   }, [viewingPost]);
 
@@ -167,6 +180,7 @@ const MainView = ({
     setNewTitle("");
     setNewSummary("");
     setNewContent("");
+    setNewImage("");
     setNewPublishedState("false");
   }, [comments, viewingPost]);
 
@@ -211,6 +225,7 @@ const MainView = ({
             title: newTitle,
             summary: newSummary,
             content: newContent,
+            image: newImage,
             published: newPublishedState,
           }),
         }
@@ -247,7 +262,7 @@ const MainView = ({
             "Content-type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ title, summary, content, published }),
+          body: JSON.stringify({ title, summary, content, image, published }),
         }
       );
 
@@ -279,6 +294,7 @@ const MainView = ({
                     setTitle(viewingPost.title);
                     setSummary(viewingPost.summary);
                     setContent(viewingPost.content);
+                    setImage(viewingPost.image);
                     setEditingPost(!editingPost);
                   }}
                 >
@@ -296,6 +312,10 @@ const MainView = ({
                 required
                 maxLength={50}
               />
+              <div style={{marginTop: "6px"}}>
+                <label style={{marginRight: "12px"}} htmlFor="image">Image URL</label>
+                <input style={{width: "100%"}} type="text" id="image" name="image" value={image} placeholder="Insert link to image" onChange={(e) => setImage(e.target.value)}/>
+              </div>
               <h3>Summary</h3>
               <label hidden htmlFor="summary"></label>
               <textarea
@@ -349,6 +369,7 @@ const MainView = ({
                 </button>
               </div>
               <h2>{viewingPost.title}</h2>
+              {viewingPost.image ? (<div className="postBannerImage" style={{backgroundImage: `url(${viewingPost.image})`}}></div>) : (<div></div>)}
               <h3>Summary</h3>
               <p>{viewingPost.summary}</p>
               <span className="post-menu">
@@ -404,6 +425,10 @@ const MainView = ({
               required
               maxLength={50}
             />
+            <div style={{marginTop: "6px"}}>
+              <label style={{marginRight: "12px"}} htmlFor="image">Image URL</label>
+              <input style={{width: "100%"}} type="text" id="image" name="image" value={newImage} placeholder="Insert link to image" onChange={(e) => setNewImage(e.target.value)}/>
+            </div>
             <h3>Summary</h3>
             <label hidden htmlFor="summary"></label>
             <textarea
