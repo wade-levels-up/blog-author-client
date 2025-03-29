@@ -79,7 +79,7 @@ const SignIn = ({
   async function handleSubmitLogin(event) {
     event.preventDefault();
 
-    const response = await fetch(`https://blog-api-production-346d.up.railway.app/login`, {
+    const response = await fetch(`https://blog-proxy-production.up.railway.app/login`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -92,7 +92,7 @@ const SignIn = ({
       setLocalStorage("token", data.token);
 
       const userResponse = await fetch(
-        `https://blog-api-production-346d.up.railway.app/users/${username}`,
+        `https://blog-proxy-production.up.railway.app/users/${username}`,
         {
           method: "GET",
           headers: {
@@ -122,7 +122,7 @@ const SignIn = ({
     event.preventDefault();
     const isAuthor = "true";
 
-    const response = await fetch(`https://blog-api-production-346d.up.railway.app/users`, {
+    const response = await fetch(`https://blog-proxy-production.up.railway.app/users`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
